@@ -1,0 +1,19 @@
+# -*- mode: gitignore; -*-
+*~
+.cache/
+
+elpa/
+el-get/
+
+recentf
+undohist/
+
+transient/
+
+prescient-save.el
+
+projectile-bookmarks.eld
+
+url/
+
+.lsp-session-*
