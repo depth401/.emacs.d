@@ -175,8 +175,9 @@
   :custom ((org-src-tab-acts-natively . t)
            (org-src-preserve-indentation . t)
            (org-edit-src-content-indentation . 0))
-
   :config
+  (plist-put org-format-latex-options :scale 1.2)
+
   (setq-default prettify-symbols-alist '(("#+begin_src" . "")
                                          ;; ("#+begin_src" . "▨")
                                          ("#+end_src" . "▨")
