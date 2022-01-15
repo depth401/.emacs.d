@@ -55,6 +55,19 @@
   (defalias 'yes-or-no-p 'y-or-n-p))
 #+end_src
 
+** Mac
+
+#+begin_src emacs-lisp
+(leaf mac
+  :when (eq system-type 'darwin)
+  :config
+  (leaf key-config
+    :custom ((mac-command-modifier . 'alt)
+             (mac-option-modifier . 'meta)
+             (default-directory . "~/")
+             (command-line-default-directory . "~/"))))
+#+end_src
+
 * Byte Compile
 
 #+begin_src emacs-lisp
