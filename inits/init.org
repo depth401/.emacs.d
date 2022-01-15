@@ -448,8 +448,8 @@
   :diminish ""
   :ensure t
   :bind
-  (:company-mode-map
-   ("TAB" . indent-for-tab-command))
+  ;; (:company-mode-map
+  ;;  ("TAB" . indent-for-tab-command))
   (:company-active-map
    ("C-n" . company-select-next)
    ("C-p" . company-select-previous))
