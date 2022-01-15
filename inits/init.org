@@ -46,11 +46,12 @@
 (leaf cus-start
   :doc "define customization properties of builtins"
   :tag "builtin" "internal"
-  :custom ((indent-tabs-mode . nil)
+  :custom `((indent-tabs-mode . nil)
            (make-backup-files . nil)
            (auto-save-default . nil)
            (suggest-key-bindings . nil)
-           (delete-by-moving-to-trash . t))
+           (delete-by-moving-to-trash . t)
+           (custom-file . ,(locate-user-emacs-file "custom.el")))
   :config
   (defalias 'yes-or-no-p 'y-or-n-p))
 #+end_src
