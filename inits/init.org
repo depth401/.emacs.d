@@ -155,6 +155,7 @@
 
 #+begin_src emacs-lisp
 (leaf smooth-scroll
+  :disabled t
   :diminish ""
   :ensure t
   :global-minor-mode t)
@@ -253,6 +254,7 @@
            (enable-recursive-minibuffers . t))
   :config
   (leaf ivy-posframe
+    :disabled t
     :diminish ""
     :ensure t
     :global-minor-mode ivy-posframe-mode
@@ -267,10 +269,10 @@
       (((class color) (background dark)) :foreground "#EE6363"))
     "Face used by Ivy for highlighting the arrow.")
 
-  (defface my-ivy-arrow-invisible
-    `((((class color) (background light)) :foreground ,(face-attribute 'ivy-posframe :background))
-      (((class color) (background dark)) :foreground "#31343F"))
-    "Face used by Ivy for highlighting the invisible arrow.")
+  ;; (defface my-ivy-arrow-invisible
+  ;;   `((((class color) (background light)) :foreground ,(face-attribute 'ivy-posframe :background))
+  ;;     (((class color) (background dark)) :foreground "#31343F"))
+  ;;   "Face used by Ivy for highlighting the invisible arrow.")
 
   (defun my-pre-prompt-function ()
     (if window-system
