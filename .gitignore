@@ -19,3 +19,5 @@ url/
 .lsp-session-*
 
 inits/init.el
+
+custom.el
