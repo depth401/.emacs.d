@@ -53,7 +53,9 @@
            (delete-by-moving-to-trash . t)
            (custom-file . ,(locate-user-emacs-file "custom.el")))
   :config
-  (defalias 'yes-or-no-p 'y-or-n-p))
+  (defalias 'yes-or-no-p 'y-or-n-p)
+
+  (show-paren-mode t))
 #+end_src
 
 ** Mac
@@ -520,10 +522,10 @@ Apple M1 がサポートされていないようなのでコメントアウト�
 ** rainbow-delimiters
 
 #+begin_src emacs-lisp
-(leaf rainbow-delimiters
-  :diminish ""
-  :ensure t
-  :hook prog-mode-hook)
+;; (leaf rainbow-delimiters
+;;   :diminish ""
+;;   :ensure t
+;;   :hook prog-mode-hook)
 #+end_src
 
 ** Syntax Check
