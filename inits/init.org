@@ -473,6 +473,17 @@
   :global-minor-mode global-company-mode)
 #+end_src
 
+* Parens
+
+#+begin_src emacs-lisp
+(leaf smartparens
+  :diminish ""
+  :ensure t
+  :global-minor-mode smartparens-global-mode
+  :config
+  (require 'smartparens-config))
+#+end_src
+
 * Programming
 
 ** tree-sitter
@@ -545,6 +556,13 @@ Apple M1 がサポートされていないようなのでコメントアウト�
   :ensure t
   :custom ((magit-display-buffer-function . #'magit-display-buffer-fullframe-status-v1)
            (magit-completing-read-function . 'ivy-completing-read)))
+#+end_src
+
+*** git-modes
+
+#+begin_src emacs-lisp
+(leaf git-modes
+  :ensure t)
 #+end_src
 
 *** git-gutter
