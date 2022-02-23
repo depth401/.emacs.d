@@ -475,6 +475,35 @@
   :global-minor-mode global-company-mode)
 #+end_src
 
+* Browser
+
+#+begin_src emacs-lisp
+(leaf eww
+  :bind (:eww-mode-map
+         ("h" . backward-char)
+         ("j" . next-line)
+         ("k" . previous-line)
+         ("l" . forward-char)
+         ("J" . view-scroll-line-forward)
+         ("K" . view-scroll-line-forward)
+         ("[" . eww-back-url)
+         ("]" . eww-forward-url))
+  :custom ((eww-search-prefix . "https://www.google.co.jp/search?kl=jp-jp&k1=-1&kf=-1&q="))
+  :config
+  (defun eww-mode-hook--rename-buffer ()
+    "Rename eww browser's buffer so sites open in new page."
+    (rename-buffer "eww" t))
+  (add-hook 'eww-mode-hook 'eww-mode-hook--rename-buffer))
+#+end_src
+
+* Twitter
+
+#+begin_src emacs-lisp
+(leaf twittering-mode
+  :ensure t
+  :custom ((twittering-use-master-password . t)))
+#+end_src
+
 * Programming
 
 ** tree-sitter
