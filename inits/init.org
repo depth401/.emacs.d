@@ -1,6 +1,13 @@
 #+title: Emacs 
 #+options: toc:2 num:nil ^:nil
 
+
+* Emacs
+
+#+begin_src emacs-lisp
+;;; init.el --- init.el -*- lexical-binding: t -*-
+#+end_src
+
 * leaf
 
 #+begin_src emacs-lisp
@@ -63,6 +70,9 @@
 #+begin_src emacs-lisp
 (leaf mac
   :when (eq system-type 'darwin)
+  :custom ((dired-use-ls-dired . t)
+           (insert-directory-program . "gls")
+           (dired-listing-switches . "-aBhl --group-directories-first"))
   :config
   (leaf key-config
     :custom ((mac-command-modifier . 'alt)
@@ -252,6 +262,7 @@
 
 #+begin_src emacs-lisp
 (leaf ivy
+  :disabled t
   :diminish ""
   :ensure t
   :bind (("C-c C-r" . ivy-resume))
@@ -328,6 +339,7 @@
 
 #+begin_src emacs-lisp
 (leaf counsel
+  :disabled t
   :diminish ""
   :ensure t
   :bind (("C-M-s" . counsel-rg)
@@ -343,6 +355,7 @@
 
 #+begin_src emacs-lisp
 (leaf counsel-ghq
+  :disabled t
   :el-get SuzumiyaAoba/counsel-ghq
   :bind (("C-c C-g" . counsel-ghq)))
 #+end_src
@@ -351,9 +364,113 @@
 
 #+begin_src emacs-lisp
 (leaf swiper
+  :disabled t
   :ensure t
   :bind (("C-s" . swiper)
          ("M-s p" . swiper-thing-at-point)))
+#+end_src
+
+** vertico
+
+#+begin_src emacs-lisp
+(leaf vertico
+  :ensure t
+  :custom ((vertico-count . 20))
+  :init
+  (vertico-mode)
+
+  :config
+  (leaf orderless
+    :ensure t
+    :init (setq completion-styles '(orderless)
+                completion-category-defaults 'nil
+                completion-category-overrides '((file (styles partial-completion)))))
+
+  (leaf emacs
+    :init
+    ;; Add prompt indicator to `completing-read-multiple'.
+  ;; Alternatively try `consult-completing-read-multiple'.
+  (defun crm-indicator (args)
+    (cons (concat "[CRM] " (car args)) (cdr args)))
+  (advice-add #'completing-read-multiple :filter-args #'crm-indicator)
+
+  ;; Do not allow the cursor in the minibuffer prompt
+  (setq minibuffer-prompt-properties
+        '(read-only t cursor-intangible t face minibuffer-prompt))
+  (add-hook 'minibuffer-setup-hook #'cursor-intangible-mode)
+
+  ;; Emacs 28: Hide commands in M-x which do not work in the current mode.
+  ;; Vertico commands are hidden in normal buffers.
+  ;; (setq read-extended-command-predicate
+  ;;       #'command-completion-default-include-p)
+
+  ;; Enable recursive minibuffers
+  (setq enable-recursive-minibuffers t)))
+#+end_src
+
+** cousult
+
+#+begin_src emacs-lisp
+(defun consult-thing-at-point (&optional at-point)
+  "Consult-line uses things-at-point."
+  (interactive "P")
+  (consult-line (thing-at-point 'symbol)))
+
+(leaf consult
+  :ensure t
+  :bind (("C-s" . consult-line)
+         ("M-s M-s" . consult-thing-at-point)
+         ([remap goto-line] . consult-goto-line))
+  :custom `((consult-preview-raw-size . 1024000)
+            (consult-preview-key . ,(kbd "M-.")))
+  :config
+
+  (leaf marginalia
+    :ensure t
+    :init
+    (marginalia-mode))
+
+  (leaf embark
+    :ensure t
+    :bind (("C-." . embark-act)
+           ("C-;" . embark-dwim)
+           ("C-h B" . embark-bindings))
+    :init
+    (setq prefix-help-command #'embark-prefix-help-command)
+
+    :config
+    ;; Hide the mode line of the Embark live/completions buffers
+    (add-to-list 'display-buffer-alist
+                 '("\\`\\*Embark Collect \\(Live\\|Completions\\)\\*"
+                   nil
+                   (window-parameters (mode-line-format . none)))))
+
+  (leaf embark-consult
+    :ensure t
+    :after embark consult
+    :leaf-defer nil
+    :hook ((embark-collect-mode . consult-preview-at-point-mode)))
+
+  (leaf affe
+    :ensure t
+    :after orderless
+    :bind (("C-c s" . affe-grep))
+    :init (setq affe-highlight-function 'orderless-highlight-matches
+                affe-regexp-function 'orderless-pattern-compiler
+                affe-find-command "fd --color=never --full-path"))
+
+  (leaf consult-ghq
+    :ensure t
+    :bind (("C-c C-g" . consult-ghq-find))))
+#+end_src
+
+** History
+
+#+begin_src emacs-lisp
+(leaf savehist
+  :ensure t
+  :init
+  (savehist-mode))
 #+end_src
 
 ** prescient
@@ -447,16 +564,23 @@
 
 #+begin_src emacs-lisp
 (leaf counsel-projectile
+  :disabled t
   :diminish projectile
   :ensure t
   :global-minor-mode counsel-projectile-mode
   :bind-keymap ("C-c p" . projectile-command-map))
 #+end_src
 
+#+begin_src emacs-lisp
+(leaf consult-projectile
+  :ensure t)
+#+end_src
+
 * Completion
 
 #+begin_src emacs-lisp
 (leaf company
+  :disabled t
   :diminish ""
   :ensure t
   :bind
@@ -473,6 +597,41 @@
            (company-ignore-case . t)
            (company-dabbrev-downcase . nil))
   :global-minor-mode global-company-mode)
+#+end_src
+
+#+begin_src emacs-lisp
+(leaf corfu
+  :ensure t
+  :pre-setq ((tab-always-indent . 'complete)
+             (corfu-cycle . t)
+             (corfu-auto . t)
+             (corfu-auto-prefix . 1))
+  :global-minor-mode corfu-global-mode
+  :config
+
+  (leaf cape
+    :ensure t
+    :init
+    (add-to-list 'completion-at-point-functions #'cape-file)
+    (add-to-list 'completion-at-point-functions #'cape-tex)
+    (add-to-list 'completion-at-point-functions #'cape-dabbrev)
+    (add-to-list 'completion-at-point-functions #'cape-keyword)
+    (add-to-list 'completion-at-point-functions #'cape-symbol))
+
+  (leaf kind-icon
+    :ensure t
+    :require t
+    :after corfu
+    :custom ((kind-icon-default-face . 'corfu-default))
+    :config
+    (add-to-list 'corfu-margin-formatters #'kind-icon-margin-formatter))
+
+  (leaf corfu-doc
+    :el-get galeo/corfu-doc
+    :bind (:corfu-map
+           ("M-p" . corfu-doc-scroll-down)
+           ("M-n" . corfu-doc-scroll-up))
+    :hook ((corfu-mode-hook . corfu-doc-mode))))
 #+end_src
 
 * Browser
@@ -620,6 +779,10 @@ Apple M1 がサポートされていないようなのでコメントアウト�
 #+begin_src emacs-lisp
 (leaf lsp-mode
   :ensure t
+  :pre-setq ((lsp-keymap-prefix . "M-l")
+             (lsp-idle-delay . 0.5)
+             (lsp-log-io . nil)
+             (lsp-completion-provider . :none))
   :custom ((lsp-document-sync-method lsp--sync-incremental)))
 #+end_src
 

@@ -7,12 +7,14 @@ el-get/
 
 recentf
 undohist/
+history
 
 transient/
 
 prescient-save.el
 
 projectile-bookmarks.eld
+projects
 
 url/
 
@@ -21,3 +23,5 @@ url/
 inits/init.el
 
 custom.el
+
+eshell/
