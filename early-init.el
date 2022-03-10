@@ -22,7 +22,6 @@
 
 (setq frame-inhibit-implied-resize t)
 
-(push '(fullscreen . maximized) default-frame-alist)
 (push '(vertical-scroll-bars) default-frame-alist)
 (push '(menu-bar-lines . 0) default-frame-alist)
 (push '(tool-bar-lines . 0) default-frame-alist)
