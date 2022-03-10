@@ -422,7 +422,7 @@
          ("M-s M-s" . consult-thing-at-point)
          ([remap goto-line] . consult-goto-line))
   :custom `((consult-preview-raw-size . 1024000)
-            (consult-preview-key . ,(kbd "M-.")))
+            (consult-preview-key . ,(kbd "M-o")))
   :config
 
   (leaf marginalia
@@ -678,14 +678,19 @@
 
 ** tree-sitter
 
-Apple M1 がサポートされていないようなのでコメントアウトしておく.
-
-[[https://github.com/emacs-tree-sitter/elisp-tree-sitter/issues/197][emacs-tree-sitter/elisp-tree-sitter/#197]]
-
 #+begin_src emacs-lisp
-;; (leaf tree-sitter
-;;   :ensure t
-;;   :global-minor-mode global-tree-sitter-mode)
+(leaf tree-sitter
+  :ensure t
+  :hook ((tree-sitter-after-on-hook . tree-sitter-hl-mode))
+  :global-minor-mode global-tree-sitter-mode
+
+  :config
+  (leaf tree-sitter-langs
+    :ensure t
+    :config
+    (tree-sitter-require 'c)
+    (tree-sitter-require 'rust)
+    (tree-sitter-require 'typescript)))
 #+end_src
 
 ** eldoc
