@@ -8,23 +8,6 @@
 ;;; init.el --- init.el -*- lexical-binding: t -*-
 #+end_src
 
-* straight
-
-#+begin_src emacs-lisp
-(defvar bootstrap-version)
-(let ((bootstrap-file
-       (expand-file-name "straight/repos/straight.el/bootstrap.el" user-emacs-directory))
-      (bootstrap-version 5))
-  (unless (file-exists-p bootstrap-file)
-    (with-current-buffer
-        (url-retrieve-synchronously
-         "https://raw.githubusercontent.com/raxod502/straight.el/develop/install.el"
-         'silent 'inhibit-cookies)
-      (goto-char (point-max))
-      (eval-print-last-sexp)))
-  (load bootstrap-file nil 'nomessage))
-#+end_src
-
 * leaf
 
 #+begin_src emacs-lisp
@@ -224,13 +207,10 @@
 
 #+begin_src emacs-lisp
 (leaf org
-  :straight (org-mode :type git :host github :repo "bzg/org-mode")
   :custom ((org-src-tab-acts-natively . t)
            (org-src-preserve-indentation . t)
            (org-edit-src-content-indentation . 0))
   :config
-  (require 'org-install)
-
   (plist-put org-format-latex-options :scale 1.2)
 
   (setq-default prettify-symbols-alist '(("#+begin_src" . "")
